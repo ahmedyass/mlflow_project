@@ -1,0 +1,9 @@
+FROM python:3.8-slim
+
+WORKDIR /app
+
+RUN pip install mlflow scikit-learn numpy
+
+COPY . .
+
+CMD ["python", "digits_comparaison.py"]

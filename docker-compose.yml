@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  mlflow-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.mlflowserver
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+    networks:
+      - mlflow-network
+
+  ml-training:
+    build: 
+      context: .
+      dockerfile: Dockerfile.mltraining
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow-server:5000
+    depends_on:
+      - mlflow-server
+    networks:
+      - mlflow-network
+
+networks:
+  mlflow-network:
+    driver: bridge
